@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSO Universitas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hidden { display: none !important; }
+        .toast-enter { animation: slideIn 0.3s ease-out forwards; }
+        .toast-leave { animation: fadeOut 0.3s ease-out forwards; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen flex flex-col font-sans">
+    
+    <!-- Bagian Login -->
+    <div id="login-section" class="flex-1 flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-100">
+            <div class="text-center mb-8">
+                <div class="bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-md">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800">SSO Universitas</h1>
+                <p class="text-gray-500 mt-2 text-sm">Satu akun untuk semua layanan akademik</p>
+            </div>
+            
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">NIM / NIDN</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <input type="text" value="230199999" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kata Sandi</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <input type="password" value="password123" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>
+                    </div>
+                </div>
+                
+                <button type="submit" id="login-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition shadow-md flex items-center justify-center space-x-2 mt-6">
+                    <span id="btn-text">Masuk SSO</span>
+                    <i id="btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bagian Dashboard -->
+    <div id="dashboard-section" class="hidden flex-col h-full">
+        <!-- Navbar -->
+        <nav class="bg-blue-600 text-white shadow-md p-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                <span class="font-bold text-lg hidden sm:block">Portal SSO Universitas</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right hidden sm:block">
+                    <div class="text-sm font-bold">Budi Santoso</div>
+                    <div class="text-xs text-blue-200">Mahasiswa - Aktif</div>
+                </div>
+                <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=ffffff&color=2563eb" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white">
+                <button onclick="logout()" class="text-white hover:text-red-200 transition p-2" title="Keluar">
+                    <i class="fa-solid fa-right-from-bracket text-xl"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Konten Utama -->
+        <div class="flex-1 p-6 max-w-6xl mx-auto w-full">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800">Layanan Aplikasi Tersedia</h2>
+                <p class="text-gray-600 mt-1">Klik aplikasi untuk mengakses otomatis menggunakan token kredensial SSO Anda.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Aplikasi 1 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">SIAKAD</h3>
+                    <p class="text-gray-500 text-sm mb-4">Sistem Informasi Akademik. Akses data nilai, KRS, dan jadwal kuliah.</p>
+                    <button onclick="accessApp('SIAKAD')" class="text-indigo-600 font-medium text-sm hover:text-indigo-800 flex items-center space-x-1">
+                        <span>Akses Langsung</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Aplikasi 2 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-laptop-file"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">E-Learning</h3>
+                    <p class="text-gray-500 text-sm mb-4">Platform pembelajaran daring, kuis, dan pengumpulan tugas kuliah.</p>
+                    <button onclick="accessApp('E-Learning')" class="text-green-600 font-medium text-sm hover:text-green-800 flex items-center space-x-1">
+                        <span>Akses Langsung</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Aplikasi 3 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">E-Library</h3>
+                    <p class="text-gray-500 text-sm mb-4">Perpustakaan digital, peminjaman buku, dan akses jurnal akademik.</p>
+                    <button onclick="accessApp('E-Library')" class="text-orange-600 font-medium text-sm hover:text-orange-800 flex items-center space-x-1">
+                        <span>Akses Langsung</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container untuk Notifikasi (Toast) -->
+    <div id="toast-container" class="fixed bottom-4 right-4 flex flex-col space-y-2 z-50"></div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const loginSection = document.getElementById('login-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const btnText = document.getElementById('btn-text');
+        const btnSpinner = document.getElementById('btn-spinner');
+        const loginBtn = document.getElementById('login-btn');
+        const toastContainer = document.getElementById('toast-container');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Tampilkan animasi loading
+            btnText.textContent = 'Memverifikasi...';
+            btnSpinner.classList.remove('hidden');
+            loginBtn.disabled = true;
+
+            // Simulasi proses verifikasi API/SSO (1,5 detik)
+            setTimeout(() => {
+                loginSection.classList.add('hidden');
+                dashboardSection.classList.remove('hidden');
+                dashboardSection.classList.add('flex');
+                
+                // Kembalikan status tombol ke awal
+                btnText.textContent = 'Masuk SSO';
+                btnSpinner.classList.add('hidden');
+                loginBtn.disabled = false;
+                
+                showToast('Login berhasil! Token SSO aktif.', 'success');
+            }, 1500);
+        });
+
+        function logout() {
+            dashboardSection.classList.add('hidden');
+            dashboardSection.classList.remove('flex');
+            loginSection.classList.remove('hidden');
+            showToast('Anda telah keluar dari sesi SSO.', 'info');
+        }
+
+        function accessApp(appName) {
+            showToast(`Mengakses ${appName}... Token SSO diteruskan (tanpa login).`, 'success');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast-enter flex items-center p-4 rounded-lg shadow-lg text-white max-w-sm ${type === 'success' ? 'bg-green-600' : 'bg-blue-600'}`;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-info-circle';
+            
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-xl mr-3"></i>
+                <span class="text-sm font-medium">${message}</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Hapus otomatis setelah 3 detik
+            setTimeout(() => {
+                toast.classList.replace('toast-enter', 'toast-leave');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
